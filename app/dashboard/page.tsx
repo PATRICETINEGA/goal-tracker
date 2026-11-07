@@ -3,6 +3,7 @@ import { getSession } from '@/lib/session'
 import { prisma } from '@/lib/prisma'
 import Link from 'next/link'
 import AddGoal from '@/components/AddGoal'
+import DeleteGoalButton from '@/components/DeleteGoalButton'
 export default async function Dash() {
   const s = await getSession()
   if (!s) redirect('/login')
@@ -17,9 +18,12 @@ export default async function Dash() {
       <AddGoal />
       <div className="space-y-2">
         {goals.map((g: any) => (
-          <div key={g.id} className="bg-white p-3 rounded shadow text-sm">
-            <div className="flex justify-between"><span className="font-medium">{g.title}</span><span>{g.progress}%</span></div>
-            {g.deadline && <p className="text-xs text-gray-400 mt-1">Due: {g.deadline}</p>}
+          <div key={g.id} className="bg-white p-3 rounded shadow flex justify-between items-start text-sm">
+            <div>
+              <div className="flex justify-between"><span className="font-medium">{g.title}</span><span className="ml-2">{g.progress}%</span></div>
+              {g.deadline && <p className="text-xs text-gray-400 mt-1">Due: {g.deadline}</p>}
+            </div>
+            <DeleteGoalButton id={g.id} />
           </div>
         ))}
         {goals.length === 0 && <p className="text-gray-500">No goals yet</p>}
